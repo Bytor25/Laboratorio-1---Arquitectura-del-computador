@@ -33,13 +33,17 @@ main:
 	j validar_opcion
 	
 salto_expresiones:
-	j expresiones_main
+	jal expresiones_main
+	j main
 
 salto_funciones:
-	j funciones_main
+	jal funciones_main
+	
+	j main
 	
 salto_movimientos:
 	j movimientos_main
+	j main
 	
 dato_negativo:
 	li $v0, 4
@@ -54,7 +58,6 @@ end:
 
 
 	.include "funciones.asm"	
-	.include "expresiones.asm"
 	.include "movimientos.asm"
 	
 

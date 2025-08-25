@@ -12,8 +12,8 @@ text_M08: .asciiz "\n ¡¡¡El tiempo no puede ser negativo!!!. Ingrese un número n
 text_M09: .asciiz "\n\t ¡¡NOTA!! Para el valor de la distancia inicial, ingrese el dato en metros, en caso de no tener el dato en este tipo de unidad internacional, haga la conversion manualmente.\n Distancia inicial(x0) = "
 text_M10: .asciiz "\n La distancia calculada en metros, fue de: "
 
-cero: .double 0.0
-un_medio: .double 0.5
+cero_M: .double 0.0
+un_medio_M: .double 0.5
 
 	.text
 	
@@ -28,11 +28,12 @@ validar_variables_mrua:
 	beq $t2, 1, calcular_velocidad # Valida si la opción en los tipos de variables de MRUA es 1, en caso de ser cierto, se dirige a la función calcular velocidad.
 	beq $t2, 2, calcular_distancia # Valida si la opción en los tipos de variables de MRUA es 2, en caso de ser cierto, se dirige a la función calcular distancia.
 calcular_distancia:
+	sw $ra, 0($sp)
 	jal solicitar_variables_distancia 
 	
 	mul.d $f10, $f6, $f6 # Eleva el tiempo al cuadrado y guarda el resultado en el registro $f10
 	
-	l.d $f14, un_medio # Carga el valor 0.5 en el registro $f14
+	l.d $f14, un_medio_M # Carga el valor 0.5 en el registro $f14
 	mul.d $f16, $f14, $f4 # Multiplica a un medio por la aceleración y almacena el resultado en el registro $f16
 	
 	mul.d $f18, $f16, $f10 # Multiplica el tiempo al cuadrado por el resultado de 1/2 por la aceleración y el resultado lo almacena en el registro $f18
@@ -60,7 +61,7 @@ solicitar_variables_distancia:
 	li $v0, 7 # Recibe el valor del tiempo
 	syscall
 	
-	l.d $f2, cero # Carga el valor de 0.0 en el registro $f2.
+	l.d $f2, cero_M # Carga el valor de 0.0 en el registro $f2.
 	c.lt.d $f0, $f2 # Compara si el valor de $f0 es menor que el de $f2 para validar que el tiempo no sea negativo
     	bc1t tiempo_negativo # Si la anterior condicion se cumple, se envia a la funcion de tiempo_negatico
 	
@@ -99,6 +100,7 @@ solicitar_variables_distancia:
 	jr $ra
 
 calcular_velocidad:
+	sw $ra, 0($sp)
 	jal solicitar_variables_velocidad
 	
 	mul.d $f8, $f4, $f6 # Multiplica la aceleracion($f2) con el tiempo($f3) y lo almacena en el registro $f4.
@@ -121,7 +123,7 @@ solicitar_variables_velocidad: # Menú que muestra las opciones de variables a en
 	li $v0, 7
 	syscall
 	
-	l.d $f2, cero # Carga el valor de 0.0 en el registro $f2.
+	l.d $f2, cero_M # Carga el valor de 0.0 en el registro $f2.
 	c.lt.d $f0, $f2 # Compara si el valor de $f0 es menor que el de $f2 para validar que el tiempo no sea negativo
     	bc1t tiempo_negativo # Si la anterior condicion se cumple, se envia a la funcion de tiempo_negatico
 	
@@ -188,6 +190,8 @@ movimientos_main:
 	
 	
 end_movimientos:
-	j main
+	lw   $ra, 0($sp)
+    	addi $sp, $sp, 4 
+	jr $ra
 	
 	
