@@ -12,7 +12,7 @@ Etext01: .asciiz "\n\t Opción invalida, intentelo de nuevo\n"
 	
 	j main
 	
-validar_opcion:
+validar_opcion: # Función para validar la opción seleccionada en el menú principal
 	beqz $v0, end
 	beq $v0, 1, salto_movimientos
 	beq $v0, 2, salto_funciones
@@ -20,7 +20,7 @@ validar_opcion:
 	
 	bltz $v0, dato_negativo
 
-main:  
+main:  # Muestra el menú principal y recibe el valor de la opción
 	li $v0, 4
 	la $a0, text00
 	syscall
@@ -32,20 +32,21 @@ main:
 	syscall
 	j validar_opcion
 	
-salto_expresiones:
+salto_expresiones: # Salto intermedio para el archivo de expresiones
 	jal expresiones_main
 	j main
 
-salto_funciones:
+salto_funciones: # Salto intermedio para el archivo de funciones
 	jal funciones_main
 	
 	j main
 	
-salto_movimientos:
-	j movimientos_main
+salto_movimientos: # Salto intermedio para el archivo de movimientos
+	jal movimientos_main
+	
 	j main
 	
-dato_negativo:
+dato_negativo: # Valida que el valor ingresado en la opción no sea negativo
 	li $v0, 4
 	la $a0, Etext00
 	syscall

@@ -11,23 +11,61 @@ text_M07: .asciiz "\n La velocidad calculada en metros sobre segundo, fue de: "
 text_M08: .asciiz "\n ¡¡¡El tiempo no puede ser negativo!!!. Ingrese un número nuevo.\n"
 text_M09: .asciiz "\n\t ¡¡NOTA!! Para el valor de la distancia inicial, ingrese el dato en metros, en caso de no tener el dato en este tipo de unidad internacional, haga la conversion manualmente.\n Distancia inicial(x0) = "
 text_M10: .asciiz "\n La distancia calculada en metros, fue de: "
+text_M11: .asciiz "\n\t ¿Qué variable desea calcular?: \n 1. Velocidad angular \n 2. Velocidad lineal \n 0. Salir \n" 
+text_M12: .asciiz "\n\t¡¡NOTA!! Para el valor del periodo, ingrese el dato en segundos (s), en caso de no tenerlo en este tipo de unidad internacional, haga la conversion manualmente y tener en cuenta que el valor solo puede ser positivo.\n Periodo(T) = "
+text_M13: .asciiz "\n El resultado de la velocidad angular en (rad/s) es: "
+text_M14: .asciiz "\n\t¡¡NOTA!! Para el valor del radio, ingrese el dato en centimetros (m), en caso de no tenerlo en este tipo de unidad internacional, haga la conversion manualmente y tener en cuenta que el valor solo puede ser positivo.\n Radio(r) = "
+text_M15: .asciiz "\n El resultado de la velocidad lineal en (m/s) es: " 
+text_M16: .asciiz "\n ¡¡¡El radio no puede ser negativo!!!. Ingrese un número nuevo.\n"
 
 cero_M: .double 0.0
 un_medio_M: .double 0.5
+pi_M: .double 3.141592653589793
+dos_M: .double 2.0
 
 	.text
 	
 	j movimientos_main
+	
+movimientos_main:
+	li $v0, 4
+	la $a0, text_M00
+	syscall
+	
+	la $a0, text_M01
+	syscall
+	
+	li $v0, 5
+	syscall
+	
+	move $t1, $v0
 
 validar_opciones_movimientos:
-	beqz $t1, end_movimientos # Validar si la opcion del menú secundario de movimientos es 0, en caso de ser cierto, vuelve al menú principal en el main.
+	beqz $t1, end_movimientos_2 # Validar si la opcion del menú secundario de movimientos es 0, en caso de ser cierto, vuelve al menú principal en el main.
 	beq $t1, 1, variables_mrua # Validar si la opcion del menú secundario de movimientos es 1, en caso de ser cierto, se dirige a la función variables_mrua.
+	beq $t1, 2, variables_mcu # Validar si la opcion del menú secundario de movimientos es 2, en caso de ser cierto, se dirige a la función variables_mcu.
+
+variables_mrua:
+	li $v0, 4
+	la $a0, text_M02
+	syscall
+	
+	la $a0, text_M01
+	syscall
+	
+	li $v0, 5
+	syscall
+	
+	move $t2, $v0
+	
 
 validar_variables_mrua:
-	beqz $t2, end_movimientos # Valida si la opcion en los tipos de variables de MRUA es o, de caso de que se cumpla, vuelve al menú principal en el main.
+	beqz $t2, end_movimientos_2 # Valida si la opcion en los tipos de variables de MRUA es 0, de caso de que se cumpla, vuelve al menú principal en el main.
 	beq $t2, 1, calcular_velocidad # Valida si la opción en los tipos de variables de MRUA es 1, en caso de ser cierto, se dirige a la función calcular velocidad.
 	beq $t2, 2, calcular_distancia # Valida si la opción en los tipos de variables de MRUA es 2, en caso de ser cierto, se dirige a la función calcular distancia.
+
 calcular_distancia:
+	addi $sp, $sp, -4 
 	sw $ra, 0($sp)
 	jal solicitar_variables_distancia 
 	
@@ -100,6 +138,7 @@ solicitar_variables_distancia:
 	jr $ra
 
 calcular_velocidad:
+	addi $sp, $sp, -4 
 	sw $ra, 0($sp)
 	jal solicitar_variables_velocidad
 	
@@ -153,14 +192,14 @@ solicitar_variables_velocidad: # Menú que muestra las opciones de variables a en
 	jr $ra
 	
 tiempo_negativo:
-    li $v0, 4
-    la $a0, text_M08
-    syscall
-    j solicitar_variables_velocidad	
-	
-variables_mrua:
+    	li $v0, 4
+    	la $a0, text_M08
+    	syscall
+    	j solicitar_variables_velocidad	
+		
+variables_mcu:
 	li $v0, 4
-	la $a0, text_M02
+	la $a0, text_M11
 	syscall
 	
 	la $a0, text_M01
@@ -168,30 +207,98 @@ variables_mrua:
 	
 	li $v0, 5
 	syscall
+	move $t3, $v0
+
+validar_variables_mcu:
+	beqz $t3, end_movimientos_2 
+	beq $t3, 1, calcular_velocidad_angular 
+	beq $t3, 2, obtener_velocidad_angular
 	
-	move $t2, $v0
-	
-	j validar_variables_mrua
-	
-movimientos_main:
+calcular_velocidad_angular:
 	li $v0, 4
-	la $a0, text_M00
+	la $a0, text_M12
 	syscall
 	
-	la $a0, text_M01
+	li $v0, 7
 	syscall
 	
-	li $v0, 5
+	l.d $f2, cero_M
+    	c.le.d $f0, $f2
+    	bc1t periodo_invalido
+	
+	mov.d $f8, $f0
+	
+	l.d $f2, pi_M
+	l.d $f4, dos_M
+	mul.d $f6, $f2, $f4
+	
+	div.d $f12, $f6, $f8
+	
+	beq $t7,1, salto_velocidad_lineal
+	
+	li $v0, 4
+	la $a0,text_M13
 	syscall
 	
-	move $t1, $v0
-	j validar_opciones_movimientos
+	li $v0, 3
+	syscall 
+salto_velocidad_lineal:
+	jr $ra
+
+periodo_invalido:
+	li $v0, 4
+    	la $a0, text_M08
+    	syscall
+    	
+    	j calcular_velocidad_angular
+
+obtener_velocidad_angular:
+	li $t7, 1
+	addi $sp, $sp, -4 
+	sw $ra, 0($sp)
+	jal calcular_velocidad_angular
 	
+	li $t7, 0
 	
+	j calcular_velocidad_lineal
 	
+calcular_velocidad_lineal:
+	li $v0, 4
+	la $a0, text_M14
+	syscall
+	
+	li $v0, 7
+	syscall
+	
+	l.d $f2, cero_M
+    	c.le.d $f0, $f2
+    	bc1t radio_invalido
+	
+	mov.d $f10, $f0
+	
+	mul.d $f12, $f12, $f10
+	
+	li $v0, 4
+	la $a0, text_M15
+	syscall
+	
+	li $v0, 3
+	syscall
+	
+	j end_movimientos
+	
+radio_invalido:
+	li $v0, 4
+    	la $a0, text_M16
+    	syscall
+    	
+    	j calcular_velocidad_lineal	
+		
 end_movimientos:
 	lw   $ra, 0($sp)
     	addi $sp, $sp, 4 
+	jr $ra
+end_movimientos_2:
 	jr $ra
 	
 	

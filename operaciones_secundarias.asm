@@ -1,23 +1,15 @@
 	.data
 	
-cero: .double 0.0
-uno: .double 1.0
-
 	.text
 
-menos_uno_elevado_n: 
-	li $t3, 0
-	li $t4, 1
-	neg $t4, $t4
-	move $t5, $t4
+menos_uno_elevado_n:
+	andi $t0, $t1, 1 
+    	beq  $t0, $zero, es_par
+    
+es_impar:
+    	li   $v0, -1
+    	jr   $ra
 
-loop_exponente:
-	mul $t5, $t5, $t4
-	
-	add $t3, $t3, 1
-	
-	blt $t3, $t1, loop_exponente
-	
-	move $v0, $t5
-	
-	jr $ra
+es_par:
+    	li   $v0, 1
+    	jr   $ra
