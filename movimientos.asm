@@ -1,22 +1,23 @@
 	.data
 	
-text_M00: .asciiz "\n\tMenú movimientos\n 1. Movimiento rectilíneo uniformemente acelerado\n 2. Movimiento circular uniforme\n 0. Salir\n "
-text_M01: .asciiz "Seleccione una opción: "	
-text_M02: .asciiz "\n\t¿Qué variable desea calcular:\n 1. Velocidad en función del tiempo \n 2. Distancia o posición en función del tiempo\n 0. salir"
-text_M03: .asciiz "\n\tIngrese el valor de las siguientes variables:\n\t ¡¡¡NOTA!!! El valor de las variables no pueden ser valores imaginarios, solo valores decimales o enteros.\n\n"
-text_M04: .asciiz "\n\t¡¡NOTA!! Para el valor de la velocidad inicial, ingrese el dato en metros sobre segundo (m/s), en caso de no tenerla en este tipo de unidad internacional, haga la conversion manualmente.\n Velocidad inicial(v0) = "
-text_M05: .asciiz "\n\t¡¡NOTA!! Para el valor de la aceleración, ingrese el dato en metros sobre segundo al cuadrado (m/s^2), en caso de no tenerla en este tipo de unidad internacional, haga la conversion manualmente.\n Aceleración(a) = "
-text_M06: .asciiz "\n\t¡¡NOTA!! Para el valor del tiempo, ingrese el dato en segundos (s), en caso de no tenerla en este tipo de unidad internacional, haga la conversion manualmente y el valor en solo puede ser positivo.\n Tiempo(t) = "
-text_M07: .asciiz "\n La velocidad calculada en metros sobre segundo, fue de: " 
-text_M08: .asciiz "\n ¡¡¡El tiempo no puede ser negativo!!!. Ingrese un número nuevo.\n"
-text_M09: .asciiz "\n\t ¡¡NOTA!! Para el valor de la distancia inicial, ingrese el dato en metros, en caso de no tener el dato en este tipo de unidad internacional, haga la conversion manualmente.\n Distancia inicial(x0) = "
-text_M10: .asciiz "\n La distancia calculada en metros, fue de: "
-text_M11: .asciiz "\n\t ¿Qué variable desea calcular?: \n 1. Velocidad angular \n 2. Velocidad lineal \n 0. Salir \n" 
-text_M12: .asciiz "\n\t¡¡NOTA!! Para el valor del periodo, ingrese el dato en segundos (s), en caso de no tenerlo en este tipo de unidad internacional, haga la conversion manualmente y tener en cuenta que el valor solo puede ser positivo.\n Periodo(T) = "
-text_M13: .asciiz "\n El resultado de la velocidad angular en (rad/s) es: "
-text_M14: .asciiz "\n\t¡¡NOTA!! Para el valor del radio, ingrese el dato en centimetros (m), en caso de no tenerlo en este tipo de unidad internacional, haga la conversion manualmente y tener en cuenta que el valor solo puede ser positivo.\n Radio(r) = "
-text_M15: .asciiz "\n El resultado de la velocidad lineal en (m/s) es: " 
-text_M16: .asciiz "\n ¡¡¡El radio no puede ser negativo!!!. Ingrese un número nuevo.\n"
+text_M00: .asciiz "\n\tMenú de movimientos\n 1. Movimiento rectilíneo uniformemente acelerado\n 2. Movimiento circular uniforme\n 0. Salir\n"
+text_M01: .asciiz "\nSeleccione una opción: "
+text_M02: .asciiz "\n\t¿Qué variable desea calcular?\n 1. Velocidad en función del tiempo\n 2. Distancia en función del tiempo\n 0. Salir"
+text_M03: .asciiz "\n\tIngrese el valor de las siguientes variables:\n\tNOTA: Los valores deben ser decimales o enteros reales, no imaginarios.\n\n"
+text_M04: .asciiz "\n\tNOTA: Ingrese la velocidad inicial en metros por segundo (m/s). Si no está en esta unidad, realice la conversión manual.\n Velocidad inicial (v0) = "
+text_M05: .asciiz "\n\tNOTA: Ingrese la aceleración en metros por segundo al cuadrado (m/s^2). Si no está en esta unidad, realice la conversión manual.\n Aceleración (a) = "
+text_M06: .asciiz "\n\tNOTA: Ingrese el tiempo en segundos (s). Si no está en esta unidad, realice la conversión manual. El valor solo puede ser positivo.\n Tiempo (t) = "
+text_M07: .asciiz "\n La velocidad calculada en metros por segundo fue: "
+text_M08: .asciiz "\n ¡El tiempo no puede ser negativo! Ingrese un nuevo valor.\n"
+text_M09: .asciiz "\n\tNOTA: Ingrese la distancia inicial en metros. Si no está en esta unidad, realice la conversión manual.\n Distancia inicial (x0) = "
+text_M10: .asciiz "\n La distancia calculada en metros fue: "
+text_M11: .asciiz "\n\t¿Qué variable desea calcular?\n 1. Velocidad angular\n 2. Velocidad lineal\n 0. Salir\n"
+text_M12: .asciiz "\n\tNOTA: Ingrese el periodo en segundos (s). Si no está en esta unidad, realice la conversión manual. El valor solo puede ser positivo.\n Periodo (T) = "
+text_M13: .asciiz "\n La velocidad angular en rad/s es: "
+text_M14: .asciiz "\n\tNOTA: Ingrese el radio en metros (m). Si no está en esta unidad, realice la conversión manual. El valor solo puede ser positivo.\n Radio (r) = "
+text_M15: .asciiz "\n La velocidad lineal en m/s es: "
+text_M16: .asciiz "\n ¡El radio no puede ser negativo! Ingrese un nuevo valor.\n"
+
 
 cero_M: .double 0.0
 un_medio_M: .double 0.5
@@ -93,6 +94,9 @@ calcular_distancia:
 	
 solicitar_variables_distancia:
 	li $v0, 4
+	la $a0, text_M03
+	syscall
+	
 	la $a0, text_M06 
 	syscall
 	
@@ -106,9 +110,6 @@ solicitar_variables_distancia:
 	mov.d $f6, $f0 # Mueve el valor del tiempo al registro $f6
 	
 	li $v0,4
-	la $a0, text_M03
-	syscall
-	
 	la $a0, text_M04 # Recibe el valor de la velocidad inicial
 	syscall
 	
@@ -156,6 +157,9 @@ calcular_velocidad:
 
 solicitar_variables_velocidad: # Menú que muestra las opciones de variables a encontrar en el MRUA
 	li $v0, 4
+	la $a0, text_M03
+	syscall
+	
 	la $a0, text_M06
 	syscall
 	
@@ -169,9 +173,6 @@ solicitar_variables_velocidad: # Menú que muestra las opciones de variables a en
 	mov.d $f6, $f0 # Mueve el valor del tiempo al registro $f6
 	
 	li $v0,4
-	la $a0, text_M03
-	syscall
-	
 	la $a0, text_M04
 	syscall
 	

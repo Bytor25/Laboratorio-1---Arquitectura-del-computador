@@ -1,11 +1,14 @@
  	.data
 
-text_E00: .asciiz "\n\t Menú expresiones:\n 1. Cálculo de pi con el método de Libniz\n 2. Cálculo de Euler 'e^x' con series de taylor\n 3. Integral definida\n 0. Salir\n"
+text_E00: .asciiz "\n\tMenú de expresiones:\n 1. Cálculo de pi con el método de Leibniz\n 2. Cálculo de Euler e^x con series de Taylor\n 3. Integral definida\n 0. Salir\n"
 text_E01: .asciiz "Seleccione una opción: "
-text_E02: .asciiz "\n e^x con series de taylor\n"
-text_E03: .asciiz "\n Ingrese el valor para x: "
-text_E04: .asciiz "\n\t NOTA: Para el valor de la cantidad de iteraciones a realizar, debe estar en un rango de los números enteros 0 a 100 iteraciones. \n Ingrese la cantidad de iteraciones que desea realizar: "
-text_E05: .asciiz "\n El resultado es: "
+text_E02: .asciiz "\n Cálculo de e^x con series de Taylor\n"
+text_E03: .asciiz "\n Ingrese el valor de x: "
+text_E04: .asciiz "\n\tNOTA: La cantidad de iteraciones debe ser un número entero entre 0 y 100.\n Ingrese la cantidad de iteraciones: "
+text_E05: .asciiz "\n El resultado de pi es: "
+text_E06: .asciiz "\n El resultado de elevado a "
+text_E07: .asciiz " es: "
+
 
 cero_E: .double 0.0	
 uno_E: .double 1.0
@@ -18,6 +21,7 @@ validar_opciones_expresiones:
 	beqz $v0, end_expresiones_2
 	beq $v0, 1, salto_pi_libniz
 	beq $v0, 2, salto_euler_taylor
+	beq $v0, 3, salto_integral
 
 	
 # Pi con método de Libniz			
@@ -67,7 +71,7 @@ resultado_pi:
 	la $a0, text_E05
 	syscall
 	
-	# imprimir double f12
+	
 	li $v0, 3
 	syscall
 	
@@ -132,7 +136,15 @@ t0_label:
 euler_resultado: 
 	beq $t3, 1, coseno_hiperbolico 
 	li $v0, 4
-	la $a0, text_E05
+	la $a0, text_E06
+	syscall
+	
+	mov.d $f12, $f2
+	li $v0, 3
+	syscall
+	
+	li $v0, 4
+	la $a0, text_E07
 	syscall
 	
 	mov.d $f12, $f10
@@ -158,7 +170,9 @@ expresiones_main: # Menú principal para el área de expresiones
 	
 	j validar_opciones_expresiones
 
-		
+
+salto_integral:
+	j integral_main		
 end_expresiones: 	
 	lw   $ra, 0($sp)
     	addi $sp, $sp, 4 
@@ -167,6 +181,7 @@ end_expresiones:
 		
 end_expresiones_2: 	
 	jr $ra
+	.include "integral.asm"
 	.include "operaciones_secundarias.asm"
 
 	

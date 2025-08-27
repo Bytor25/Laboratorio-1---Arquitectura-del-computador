@@ -1,8 +1,9 @@
 	.data
-text_F00: .asciiz "\n\t Coseno Hiperbólico\n"
+text_F00: .asciiz "\n\tCoseno hiperbólico\n"
 text_F01: .asciiz "\nIngrese un número real: "
-text_F02: .asciiz "\n\t NOTA: Para el valor de la cantidad de iteraciones a realizar, debe estar en un rango de los números enteros 0 a 100 iteraciones. \n Ingrese la cantidad de iteraciones que desea realizar: "
-text_F03: .asciiz "\nEl resultado del coseno hiperbolico es: "
+text_F02: .asciiz "\n\tNOTA: La cantidad de iteraciones debe ser un número entero entre 0 y 100.\n Ingrese la cantidad de iteraciones: "
+text_F03: .asciiz "\nEl resultado del coseno hiperbólico es: "
+
 
 dos_F: .double 2.0		
 	.text
