@@ -42,6 +42,7 @@ salto_funciones: # Salto intermedio para el archivo de funciones
 	j main
 	
 salto_movimientos: # Salto intermedio para el archivo de movimientos
+	li $t7, 0
 	jal movimientos_main
 	
 	j main
