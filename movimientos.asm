@@ -224,7 +224,7 @@ calcular_velocidad_angular:
 	syscall
 	
 	l.d $f2, cero_M
-    	c.le.d $f0, $f2
+    	c.lt.d $f0, $f2
     	bc1t periodo_invalido
 	
 	mov.d $f8, $f0
@@ -242,7 +242,9 @@ calcular_velocidad_angular:
 	syscall
 	
 	li $v0, 3
-	syscall 
+	syscall
+	j end_movimientos
+	 
 salto_velocidad_lineal:
 	jr $ra
 
@@ -272,7 +274,7 @@ calcular_velocidad_lineal:
 	syscall
 	
 	l.d $f2, cero_M
-    	c.le.d $f0, $f2
+    	c.lt.d $f0, $f2
     	bc1t radio_invalido
 	
 	mov.d $f10, $f0

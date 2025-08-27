@@ -58,15 +58,16 @@ loop_pi:
 	
 	add.d $f10, $f10, $f6 # Realiza la sumatoria de cada resultado de cada iteración
 	
-	l.d $f8, cuatro_E
-	
-	mul.d $f12, $f10, $f8
-	
 	addi $t1, $t1, 1
 	
 	ble $t1,$t2, loop_pi
 	
 resultado_pi:
+
+	l.d $f8, cuatro_E
+	
+	mul.d $f12, $f10, $f8
+	
 	li $v0, 4
 	la $a0, text_E05
 	syscall
@@ -139,7 +140,7 @@ euler_resultado:
 	la $a0, text_E06
 	syscall
 	
-	mov.d $f12, $f2
+	mov.d $f12, $f2 
 	li $v0, 3
 	syscall
 	
@@ -151,6 +152,8 @@ euler_resultado:
 	
 	li $v0, 3
 	syscall
+	
+	j end_expresiones
 
 coseno_hiperbolico: # Salto de retorno a la operación de coseno hiperbolico
 	jr $ra

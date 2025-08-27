@@ -54,7 +54,7 @@ dato_negativo: # Valida que el valor ingresado en la opción no sea negativo
 	j main
 
 end:
-	li $v0, 16
+	li $v0, 10
 	syscall
 
 

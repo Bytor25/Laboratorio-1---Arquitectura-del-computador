@@ -1,7 +1,7 @@
 	.data
 	
 text_I00: .asciiz "\n\tIntegral de x^2 en el intervalo [a, b]"
-text_I01: .asciiz "\n\tNOTA: Los valores de a y b deben ser reales, y b no puede ser menor que a."
+text_I01: .asciiz "\n\tNOTA: Los valores de a y b deben ser reales, y b no puede ser menor que a.Si va a ingresar fracciones debe convertirlas a valores decimales."
 text_I02: .asciiz "\n Ingrese el valor de 'a': "
 text_I03: .asciiz "\n Ingrese el valor de 'b': "
 text_I04: .asciiz "\n La integral de x^2 entre "
